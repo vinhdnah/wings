@@ -1,0 +1,4637 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LexiMaster Pro - Hệ Thống Học Từ Vựng THPT & ĐGNL</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      /* Light Theme Variables */
+      --bg-gradient: linear-gradient(135deg, #f3f8ff 0%, #e0ebff 100%);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(255, 255, 255, 0.4);
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --secondary: #10b981;
+      --accent: #8b5cf6;
+      --danger: #ef4444;
+      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      --tab-bg: #e2e8f0;
+      --tab-active: #ffffff;
+      --input-bg: #ffffff;
+    }
+
+    [data-theme="dark"] {
+      /* Dark Theme Variables */
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #60a5fa;
+      --primary-hover: #3b82f6;
+      --secondary: #34d399;
+      --accent: #a78bfa;
+      --danger: #f87171;
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      --tab-bg: #334155;
+      --tab-active: #1e293b;
+      --input-bg: #0f172a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      overflow-x: hidden;
+    }
+
+    /* Glassmorphism Classes */
+    .glass {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 1.5rem;
+      box-shadow: var(--glass-shadow);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding: 1rem 2rem;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .theme-toggle {
+      background: var(--tab-bg);
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      color: var(--text-main);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--tab-bg);
+      padding: 0.5rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: 0.8rem;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--tab-active);
+      color: var(--primary);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Tab Content Area */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Buttons & Inputs */
+    button {
+      outline: none;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.8rem 1rem;
+      border-radius: 1rem;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    /* ---------------------------------- */
+    /* TAB 1: LỘ TRÌNH HỌC (LEARNING PATH) */
+    /* ---------------------------------- */
+    .path-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .path-card {
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .path-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+    }
+
+    .path-card:nth-child(1)::before {
+      background: var(--secondary);
+    }
+
+    .path-card:nth-child(2)::before {
+      background: var(--primary);
+    }
+
+    .path-card:nth-child(3)::before {
+      background: var(--accent);
+    }
+
+    .path-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-main);
+    }
+
+    .path-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .path-badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      background: var(--tab-bg);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 1rem;
+    }
+
+    /* ---------------------------------- */
+    /* TAB 2: KHO TỪ VỰNG                 */
+    /* ---------------------------------- */
+    .vocab-layout {
+      display: grid;
+      grid-template-columns: 1fr 2.5fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .vocab-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .vocab-toolbar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem;
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--text-muted);
+      border-radius: 10px;
+    }
+
+    .word-item {
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .word-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .word-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .word-type {
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .word-meaning {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .word-example {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      background: var(--tab-bg);
+      padding: 0.8rem;
+      border-radius: 0.8rem;
+      margin-top: 0.8rem;
+    }
+
+    .word-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .tag-B1 {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .tag-B2 {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .tag-C1 {
+      background: #f3e8ff;
+      color: #6b21a8;
+    }
+
+    .tag-C2 {
+      background: #ffe4e6;
+      color: #be123c;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 1.2rem;
+      opacity: 0.5;
+    }
+
+    .delete-btn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    /* ---------------------------------- */
+    /* TAB 3: ÔN LUYỆN (QUIZ)             */
+    /* ---------------------------------- */
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .quiz-settings {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .quiz-question {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 2rem;
+      letter-spacing: 1px;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .quiz-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .quiz-opt-btn {
+      background: var(--input-bg);
+      border: 2px solid var(--card-border);
+      padding: 1.2rem;
+      border-radius: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt-btn:hover {
+      border-color: var(--primary);
+      background: var(--tab-bg);
+      transform: scale(1.02);
+    }
+
+    .quiz-opt-btn.correct {
+      background: var(--secondary);
+      color: white;
+      border-color: var(--secondary);
+    }
+
+    .quiz-opt-btn.wrong {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+
+    .quiz-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .feedback {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      min-height: 30px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <header class="glass">
+      <div class="logo">
+        <span>🚀</span> LexiMaster Pro
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        🌙 Dark Mode
+      </button>
+    </header>
+
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-target="tab-path">🗺️ Lộ Trình Học</button>
+      <button class="tab-btn" data-target="tab-vocab">📚 Kho Từ Vựng</button>
+      <button class="tab-btn" data-target="tab-quiz">🎯 Ôn Luyện</button>
+    </nav>
+
+    <!-- TAB 1: LỘ TRÌNH HỌC -->
+    <div id="tab-path" class="tab-content active">
+      <div class="path-container">
+        <div class="path-card glass">
+          <div class="path-badge">Chặng 1</div>
+          <h3>Nền Tảng B1 - B2</h3>
+          <p>Hệ thống lại toàn bộ từ vựng SGK 10-11-12. Trọng tâm vào các từ vựng cốt lõi dễ xuất hiện trong đề thi THPT
+            Quốc Gia mức độ cơ bản. Xây dựng phản xạ nhận diện từ đồng nghĩa/trái nghĩa.</p>
+          <button class="btn btn-secondary"
+            onclick="document.querySelector('[data-target=\'tab-vocab\']').click(); document.getElementById('filterLevel').value='B1'; filterVocab();">Học
+            mức B1-B2</button>
+        </div>
+
+        <div class="path-card glass">
+          <div class="path-badge">Chặng 2</div>
+          <h3>Bứt Phá C1 - C2</h3>
+          <p>Trang bị 300+ từ vựng nâng cao mức độ C1, C2 thường được dùng làm "Câu hỏi phân loại học sinh giỏi" trong
+            đề thi THPT và ĐGNL. Giúp bạn chinh phục điểm 9+ dễ dàng.</p>
+          <button class="btn"
+            onclick="document.querySelector('[data-target=\'tab-vocab\']').click(); document.getElementById('filterLevel').value='C1'; filterVocab();">Học
+            mức C1-C2</button>
+        </div>
+
+        <div class="path-card glass">
+          <div class="path-badge">Chặng 3</div>
+          <h3>Collocations & Idioms</h3>
+          <p>Nắm vững hơn 200 cụm từ cố định (Collocations) và Phrasal Verbs hay thi nhất. Hạn chế sai sót trong phần
+            điền từ vào đoạn văn và tìm lỗi sai.</p>
+          <button class="btn" style="background: var(--accent)"
+            onclick="document.querySelector('[data-target=\'tab-vocab\']').click(); document.getElementById('filterLevel').value='all'; filterVocab();">Ôn
+            Toàn Bộ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: KHO TỪ VỰNG -->
+    <div id="tab-vocab" class="tab-content">
+      <div class="vocab-layout">
+        <!-- Form Thêm Từ -->
+        <div class="glass" style="padding: 1.5rem; height: fit-content;">
+          <h2 style="margin-bottom: 1.5rem; color: var(--primary);">➕ Thêm Từ Mới</h2>
+          <div class="form-group">
+            <label>Từ vựng (Tiếng Anh)</label>
+            <input type="text" id="addWord" placeholder="VD: ubiquitous">
+          </div>
+          <div class="form-group">
+            <label>Nghĩa Tiếng Việt</label>
+            <input type="text" id="addMeaning" placeholder="VD: phổ biến ở khắp nơi">
+          </div>
+          <div class="form-group">
+            <label>Từ Loại</label>
+            <select id="addType">
+              <option value="n">Danh từ (n)</option>
+              <option value="v">Động từ (v)</option>
+              <option value="adj">Tính từ (adj)</option>
+              <option value="adv">Trạng từ (adv)</option>
+              <option value="idiom">Thành ngữ / Cụm từ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Cấp độ</label>
+            <select id="addLevel">
+              <option value="B1">B1 (Trung bình)</option>
+              <option value="B2">B2 (Khá)</option>
+              <option value="C1">C1 (Giỏi)</option>
+              <option value="C2">C2 (Xuất sắc)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Chủ đề</label>
+            <input type="text" id="addTopic" placeholder="VD: Đề thi THPT, Môi trường..." value="Đề thi THPT">
+          </div>
+          <div class="form-group">
+            <label>Ví dụ minh họa</label>
+            <textarea id="addExample" rows="2" placeholder="He aimed to make his product ubiquitous."></textarea>
+          </div>
+          <button class="btn" style="width: 100%;" onclick="addNewWord()">Lưu Vào Kho</button>
+        </div>
+
+        <!-- Danh Sách Từ -->
+        <div>
+          <div class="vocab-toolbar glass" style="padding: 1rem; border-radius: 1rem;">
+            <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm từ vựng..." style="flex: 2; min-width: 200px;"
+              oninput="filterVocab()">
+            <select id="filterLevel" style="flex: 1; min-width: 150px;" onchange="filterVocab()">
+              <option value="all">Tất cả cấp độ</option>
+              <option value="B1">Chỉ B1</option>
+              <option value="B2">Chỉ B2</option>
+              <option value="C1">Chỉ C1</option>
+              <option value="C2">Chỉ C2</option>
+            </select>
+            <button class="btn btn-secondary" onclick="loadDefaultData()">Khôi phục Data Gốc</button>
+          </div>
+
+          <div class="vocab-grid" id="vocabGrid">
+            <!-- Từ vựng sẽ được render bằng JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: ÔN LUYỆN -->
+    <div id="tab-quiz" class="tab-content">
+      <div class="quiz-container glass">
+        <div id="quizSetup">
+          <h2 style="font-size: 2rem; margin-bottom: 1rem;">🧠 Chế Độ Ôn Luyện</h2>
+          <p style="color: var(--text-muted); margin-bottom: 2rem;">Chọn cấp độ muốn ôn tập để hệ thống tự động sinh bài
+            kiểm tra.</p>
+
+          <div class="quiz-settings">
+            <select id="quizLevelFilter" style="width: 200px;">
+              <option value="all">Ôn tập toàn bộ</option>
+              <option value="B1">Ôn tập B1</option>
+              <option value="B2">Ôn tập B2</option>
+              <option value="C1">Ôn tập C1</option>
+              <option value="C2">Ôn tập C2</option>
+            </select>
+            <button class="btn" onclick="startQuiz()">Bắt Đầu Quiz 🚀</button>
+          </div>
+        </div>
+
+        <div id="quizPlay" style="display: none;">
+          <div class="quiz-stats">
+            <span>Câu: <span id="qCurrent">1</span>/<span id="qTotal">10</span></span>
+            <span style="color: var(--primary);">Điểm: <span id="qScore">0</span></span>
+          </div>
+
+          <div class="quiz-question" id="qWord">Word</div>
+          <div class="feedback" id="qFeedback"></div>
+
+          <div class="quiz-options" id="qOptions">
+            <!-- Options render by JS -->
+          </div>
+
+          <button class="btn" id="nextQBtn" style="display: none; margin: 0 auto; margin-top: 1rem;"
+            onclick="nextQuestion()">Câu Tiếp Theo ➡️</button>
+        </div>
+
+        <div id="quizResult" style="display: none;">
+          <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">🎉 Hoàn Thành!</h2>
+          <p style="font-size: 1.5rem; margin-bottom: 2rem;">Số điểm của bạn: <strong id="finalScore"
+              style="color: var(--primary);">0/0</strong></p>
+          <button class="btn"
+            onclick="document.getElementById('quizResult').style.display='none'; document.getElementById('quizSetup').style.display='block';">Chơi
+            Lại Đề Khác</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* -----------------------------------------------------------
+       DỮ LIỆU TỪ VỰNG GỐC TRÍCH XUẤT TỪ FILE PDF (CÔ VŨ MAI PHƯƠNG)
+       ----------------------------------------------------------- */
+    const PDF_VOCAB = [
+      {
+        "word": "adulthood",
+        "meaning": "tuổi trưởng thành",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "advanced",
+        "meaning": "tiên tiến, nâng cao",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "ambitious",
+        "meaning": "đầy tham vọng",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "anxious",
+        "meaning": "lo lắng, bồn chồn",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "assistance",
+        "meaning": "sự hỗ trợ, giúp đỡ",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "attempt",
+        "meaning": "nỗ lực, sự cố gắng",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "blur",
+        "meaning": "làm mờ, trở nên mờ",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "bypass",
+        "meaning": "bỏ qua; đi đường vòng; tránh cái gì",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "cautious",
+        "meaning": "thận trọng",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "clink",
+        "meaning": "tiếng leng keng",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "commitment",
+        "meaning": "sự cam kết, tận tâm",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "competence",
+        "meaning": "năng lực, khả năng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "compulsive",
+        "meaning": "không thể cưỡng lại",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "concern",
+        "meaning": "mối lo ngại",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "confuse",
+        "meaning": "làm bối rối",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "consistency",
+        "meaning": "sự nhất quán, sự kiên định",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "demanding",
+        "meaning": "đòi hỏi cao, khó khăn",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "desperate",
+        "meaning": "tuyệt vọng",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "distribution",
+        "meaning": "sự phân phối, phân bố",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "emergence",
+        "meaning": "sự xuất hiện, nổi lên",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "enemy",
+        "meaning": "kẻ thù",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "enhance",
+        "meaning": "nâng cao, tăng cường",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "essential",
+        "meaning": "cần thiết, thiết yếu",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "ethically",
+        "meaning": "về mặt đạo đức, có đạo đức",
+        "type": "adv",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "evolve",
+        "meaning": "phát triển",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "expense",
+        "meaning": "chi phí",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "expert",
+        "meaning": "chuyên gia",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "exploit",
+        "meaning": "khai thác, bóc lột, lợi dụng",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "financial",
+        "meaning": "thuộc về tài chính",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "firm",
+        "meaning": "kiên quyết",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "frustrated",
+        "meaning": "thất vọng, chán nản, bực bội",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "generate",
+        "meaning": "tạo ra, sản xuất",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "genuine",
+        "meaning": "chân thật; thật",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "hands-on",
+        "meaning": "thực hành, thực tế",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "helpful",
+        "meaning": "hữu ích",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "honesty",
+        "meaning": "sự trung thực",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "hopeful",
+        "meaning": "đầy hy vọng",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "hopeless",
+        "meaning": "vô vọng, tuyệt vọng",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "ignorance",
+        "meaning": "sự thiếu hiểu biết",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "implement",
+        "meaning": "thực hiện, thi hành",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "impose",
+        "meaning": "áp đặt",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "improvement",
+        "meaning": "sự cải thiện",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "income",
+        "meaning": "thu nhập",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "independent",
+        "meaning": "độc lập (không phụ thuộc vào ai)",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "infrastructure",
+        "meaning": "cơ sở hạ tầng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "innovation",
+        "meaning": "sự đổi mới, sự sáng tạo",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "innovative",
+        "meaning": "sáng tạo, đổi mới",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "mindful",
+        "meaning": "lưu tâm, chú ý",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "noticeable",
+        "meaning": "đáng chú ý, dễ nhận thấy",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "overspending",
+        "meaning": "chi tiêu quá mức",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "plagiarism",
+        "meaning": "sự đạo văn",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "positive",
+        "meaning": "tích cực",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "practical",
+        "meaning": "thực tế, thiết thực",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "praise",
+        "meaning": "ca ngợi, khen ngợi",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "prioritise",
+        "meaning": "ưu tiên",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "private",
+        "meaning": "riêng tư",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "professional",
+        "meaning": "chuyên nghiệp",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "promote",
+        "meaning": "thúc đẩy",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "prompt",
+        "meaning": "lời nhắc, gợi ý",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "reliance",
+        "meaning": "sự phụ thuộc",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "require",
+        "meaning": "yêu cầu, đòi hỏi",
+        "type": "v",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "resistance",
+        "meaning": "sự kháng cự",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "restless",
+        "meaning": "bồn chồn, không yên",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "scam",
+        "meaning": "trò lừa đảo",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "scammer",
+        "meaning": "kẻ lừa đảo",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "spot",
+        "meaning": "phát hiện, nhận ra",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "subsidy",
+        "meaning": "tiền trợ cấp",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "sustainability",
+        "meaning": "sự bền vững",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "tension",
+        "meaning": "sự căng thẳng, áp lực",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "undeniably",
+        "meaning": "không thể phủ nhận",
+        "type": "adv",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "unimaginable",
+        "meaning": "không thể tưởng tượng được",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "urgent",
+        "meaning": "khẩn cấp",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "valuable",
+        "meaning": "có giá trị",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "verify",
+        "meaning": "xác minh, kiểm chứng",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "vulnerable",
+        "meaning": "dễ bị tổn thương, tấn công, ảnh hưởng",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "wisely",
+        "meaning": "một cách khôn ngoan",
+        "type": "adv",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "contaminate",
+        "meaning": "làm ô nhiễm",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "counteract",
+        "meaning": "chống lại",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "cyberbully",
+        "meaning": "bắt nạt qua mạng internet",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "decompose",
+        "meaning": "phân hủy",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "degradation",
+        "meaning": "sự suy thoái, sự hủy hoại",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "devastating",
+        "meaning": "tàn phá, phá hủy nghiêm trọng",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "dumping",
+        "meaning": "sự xả thải, sự đổ bỏ (bừa bãi)",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "durable",
+        "meaning": "bền bỉ, lâu dài",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "dweller",
+        "meaning": "cư dân",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "eco-conscious",
+        "meaning": "có ý thức bảo vệ môi trường",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "enact",
+        "meaning": "ban hành (luật), đưa vào thực thi",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "enforce",
+        "meaning": "thi hành, thực thi luật lệ",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "escalation",
+        "meaning": "sự leo thang (căng thẳng, bạo lực...)",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "ever-changing",
+        "meaning": "luôn thay đổi",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "food",
+        "meaning": "chain chuỗi thức ăn",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "fragile",
+        "meaning": "dễ vỡ, mong manh",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "garment",
+        "meaning": "áo quần, trang phục",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "illegal",
+        "meaning": "bất hợp pháp, trái phép",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "instability",
+        "meaning": "sự bất ổn, không ổn định",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "integration",
+        "meaning": "sự hội nhập, tích hợp",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "manufacturing",
+        "meaning": "sự sản xuất",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "maritime",
+        "meaning": "thuộc về biển, hàng hải",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "natural",
+        "meaning": "disaster thảm họa thiên nhiên",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "opaque",
+        "meaning": "mờ đục, không rõ ràng",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "perpetuate",
+        "meaning": "duy trì, làm cho tồn tại mãi",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "persistence",
+        "meaning": "sự kiên trì, sự dai dẳng",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "pledge",
+        "meaning": "cam kết, hứa một cách trang trọng",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "prolonged",
+        "meaning": "kéo dài",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "proper",
+        "meaning": "phù hợp, thích hợp",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "repurpose",
+        "meaning": "tái sử dụng cho mục đích khác",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "reputation",
+        "meaning": "danh tiếng, uy tín",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "resilience",
+        "meaning": "khả năng phục hồi, sự kiên cường",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "restoration",
+        "meaning": "sự phục hồi, khôi phục",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "setting",
+        "meaning": "bối cảnh (kịch, phim ảnh,…)",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "shift",
+        "meaning": "chuyển đổi, thay đổi",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "simplicity",
+        "meaning": "sự đơn giản, giản dị",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "supply",
+        "meaning": "chain chuỗi cung ứng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "synthetic",
+        "meaning": "tổng hợp, nhân tạo",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "textile",
+        "meaning": "dệt may",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "transformation",
+        "meaning": "sự biến đổi, chuyển đổi",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "transparency",
+        "meaning": "tính minh bạch, rõ ràng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "uneven",
+        "meaning": "không đều, không đồng đều",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "upcycling",
+        "meaning": "tái chế sáng tạo, tái chế nâng cấp",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "commit",
+        "meaning": "cam kết",
+        "type": "v",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "thoughtful",
+        "meaning": "chu đáo, sâu sắc",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "incredibly",
+        "meaning": "cực kỳ, đáng kinh ngạc",
+        "type": "adv",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "perspective",
+        "meaning": "quan điểm, góc nhìn",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "overwhelmed",
+        "meaning": "choáng ngợp, tràn ngập",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "validation",
+        "meaning": "sự xác nhận, phê chuẩn",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "constant",
+        "meaning": "liên tục, không đổi",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "self-esteem",
+        "meaning": "lòng tự trọng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "ethical",
+        "meaning": "đạo đức, có đạo lý",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "existence",
+        "meaning": "sự tồn tại",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "captivity",
+        "meaning": "tình trạng bị giam cầm",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "aggression",
+        "meaning": "sự hung hăng, hiếu chiến",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "sake",
+        "meaning": "lợi ích",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "replicate",
+        "meaning": "tái tạo, sao chép, mô phỏng",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "construct",
+        "meaning": "xây dựng",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "distress",
+        "meaning": "nỗi đau khổ, phiền muộn",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "danh",
+        "meaning": "dự, vinh dự",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "exhaustion",
+        "meaning": "sự kiệt sức",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "permanently",
+        "meaning": "vĩnh viễn, lâu dài",
+        "type": "adv",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "acceptable",
+        "meaning": "chấp nhận được",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "regulation",
+        "meaning": "quy định, điều lệ",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "boredom",
+        "meaning": "sự buồn chán",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "gymnasium",
+        "meaning": "phòng tập thể dục",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "meaningful",
+        "meaning": "có ý nghĩa, đầy ý nghĩa",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "intensify",
+        "meaning": "tăng cường, làm mạnh thêm",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "expand",
+        "meaning": "mở rộng, giãn ra",
+        "type": "v",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "strengthen",
+        "meaning": "củng cố, làm mạnh mẽ hơn",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "plague",
+        "meaning": "gây phiền toái",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "procrastination",
+        "meaning": "sự trì hoãn",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "destructive",
+        "meaning": "mang tính phá hoại",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "temporary",
+        "meaning": "tạm thời",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "perfectionism",
+        "meaning": "chủ nghĩa hoàn hảo",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "exacerbate",
+        "meaning": "làm trầm trọng thêm",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "distraction",
+        "meaning": "sự xao nhãng",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "dull",
+        "meaning": "tẻ nhạt, đần độn",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "accountability",
+        "meaning": "trách nhiệm (giải trình)",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "avoidance",
+        "meaning": "sự né tránh",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "sustainable",
+        "meaning": "bền vững",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "reclaim",
+        "meaning": "giành lại, đòi lại",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "repetitive",
+        "meaning": "lặp đi lặp lại",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "self-discipline",
+        "meaning": "kỷ luật bản thân",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "tedious",
+        "meaning": "tẻ nhạt, chán ngắt",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "diminish",
+        "meaning": "giảm bớt, thu nhỏ",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "moderate",
+        "meaning": "điều độ, tiết chế",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "modify",
+        "meaning": "sửa đổi, thay đổi",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "erode",
+        "meaning": "xói mòn, bào mòn",
+        "type": "v",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "gentleness",
+        "meaning": "sự nhẹ nhàng, dịu dàng",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "consistent",
+        "meaning": "nhất quán",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "unfold",
+        "meaning": "mở ra, bộc lộ (diễn biến)",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "earplug",
+        "meaning": "nút tai",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "engaging",
+        "meaning": "thu hút, lôi cuốn",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "engaged",
+        "meaning": "đính hôn; bận rộn; tham gia vào",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "engagingly",
+        "meaning": "một cách lôi cuốn",
+        "type": "adv",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "engagement",
+        "meaning": "sự đính hôn, sự tham gia, sự cam kết",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "achievement",
+        "meaning": "thành tựu, sự đạt được",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "witness",
+        "meaning": "chứng kiến",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "absorb",
+        "meaning": "hấp thụ",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "architectural",
+        "meaning": "thuộc kiến trúc",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "assignment",
+        "meaning": "bài tập, nhiệm vụ",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "auditorium",
+        "meaning": "khán phòng",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "beyond",
+        "meaning": "vượt ra ngoài",
+        "type": "prep",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "blend",
+        "meaning": "pha trộn, kết hợp",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "cognitive",
+        "meaning": "liên quan đến nhận thức",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "competition",
+        "meaning": "sự cạnh tranh",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "concept",
+        "meaning": "khái niệm",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "consumption",
+        "meaning": "sự tiêu dùng",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "cooperation",
+        "meaning": "sự hợp tác",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "critically",
+        "meaning": "một cách phê bình",
+        "type": "adv",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "currently",
+        "meaning": "hiện tại",
+        "type": "adv",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "dependence",
+        "meaning": "sự phụ thuộc",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "determination",
+        "meaning": "sự quyết tâm",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "drainage",
+        "meaning": "hệ thống thoát nước",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "ease",
+        "meaning": "làm dịu, giảm bớt",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "embark",
+        "meaning": "bắt đầu (hành trình, dự án)",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "emergency",
+        "meaning": "trường hợp khẩn cấp",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "empower",
+        "meaning": "trao quyền, làm cho ai đó mạnh hơn",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "entirely",
+        "meaning": "hoàn toàn",
+        "type": "adv",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "especially",
+        "meaning": "đặc biệt là",
+        "type": "adv",
+        "level": "A2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "excessively",
+        "meaning": "quá mức",
+        "type": "adv",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "filter",
+        "meaning": "lọc",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "flexible",
+        "meaning": "linh hoạt",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "heritage",
+        "meaning": "di sản",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "humble",
+        "meaning": "khiêm tốn, giản dị",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "identity",
+        "meaning": "danh tính",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "immigrant",
+        "meaning": "người nhập cư",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "ingredient",
+        "meaning": "thành phần",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "inspire",
+        "meaning": "truyền cảm hứng",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "insulation",
+        "meaning": "vật liệu cách nhiệt",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "interpretation",
+        "meaning": "sự diễn giải",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "navigate",
+        "meaning": "điều hướng, định hướng",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "nursery",
+        "meaning": "nhà trẻ, vườn ươm",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "odd",
+        "meaning": "kỳ lạ, lạ lùng",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "outstanding",
+        "meaning": "nổi bật, xuất sắc",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "phenomenon",
+        "meaning": "hiện tượng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "plot",
+        "meaning": "cốt truyện, âm mưu",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "practicality",
+        "meaning": "tính thực tế",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "preserve",
+        "meaning": "bảo tồn, giữ gìn",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "redemption",
+        "meaning": "sự chuộc lỗi, cứu rỗi",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "relevant",
+        "meaning": "có liên quan",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "renewal",
+        "meaning": "sự đổi mới, phục hồi",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "rooftop",
+        "meaning": "mái nhà, sân thượng",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "shortcut",
+        "meaning": "đường tắt, lối tắt; cách nhanh",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "split",
+        "meaning": "chia ra",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "streak",
+        "meaning": "chạy vụt qua, để lại vệt",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "stroll",
+        "meaning": "đi dạo v/n /strəʊl/ B2 walk, saunter run, hurry",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "sudden",
+        "meaning": "đột ngột",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "thoughtfully",
+        "meaning": "một cách sâu sắc",
+        "type": "adv",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "unforgettable",
+        "meaning": "không thể quên được",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "unusual",
+        "meaning": "bất thường",
+        "type": "adj",
+        "level": "A2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "urban",
+        "meaning": "thuộc thành phố",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "abbreviation",
+        "meaning": "chữ viết tắt",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "abrupt",
+        "meaning": "đột ngột",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "apprentice",
+        "meaning": "người học việc",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "apprenticeship",
+        "meaning": "thời kỳ học việc",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "catastrophe",
+        "meaning": "thảm họa",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "catastrophic",
+        "meaning": "thảm khốc",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "ceremony",
+        "meaning": "nghi lễ",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "civilisation",
+        "meaning": "nền văn minh",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "coherence",
+        "meaning": "tính mạch lạc",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "competent",
+        "meaning": "có năng lực",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "consequence",
+        "meaning": "hậu quả",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "definitely",
+        "meaning": "chắc chắn",
+        "type": "adv",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "determine",
+        "meaning": "xác định",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "dominant",
+        "meaning": "thống trị, chủ yếu",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "dominate",
+        "meaning": "thống trị",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "dwindling",
+        "meaning": "suy giảm",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "economically",
+        "meaning": "về mặt kinh tế",
+        "type": "adv",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "electrify",
+        "meaning": "điện khí hóa",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "embrace",
+        "meaning": "đón nhận",
+        "type": "v",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "erosion",
+        "meaning": "sự xói mòn",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "expiration",
+        "meaning": "sự hết hạn",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "finite",
+        "meaning": "hữu hạn",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "frequent",
+        "meaning": "thường xuyên",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "globalisation",
+        "meaning": "toàn cầu hóa",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "grid",
+        "meaning": "lưới điện",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "harsh",
+        "meaning": "khắc nghiệt",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "inappropriate",
+        "meaning": "không phù hợp",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "indicate",
+        "meaning": "chỉ ra",
+        "type": "v",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "industrialisation",
+        "meaning": "công nghiệp hóa",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "intermittency",
+        "meaning": "tính gián đoạn",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "maintenance",
+        "meaning": "sự bảo trì",
+        "type": "n",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "memorably",
+        "meaning": "một cách đáng nhớ",
+        "type": "adv",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "memorise",
+        "meaning": "ghi nhớ",
+        "type": "v",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "offensive",
+        "meaning": "xúc phạm",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "openly",
+        "meaning": "công khai",
+        "type": "adv",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "possible",
+        "meaning": "có thể",
+        "type": "adj",
+        "level": "A2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "postpone",
+        "meaning": "hoãn lại",
+        "type": "v",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "premature",
+        "meaning": "sớm, non nớt",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "profitable",
+        "meaning": "có lợi nhuận",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "prominent",
+        "meaning": "nổi bật",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "punctuation",
+        "meaning": "dấu câu",
+        "type": "n",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "relentless",
+        "meaning": "không ngừng nghỉ",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "reliable",
+        "meaning": "đáng tin cậy",
+        "type": "adj",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "represent",
+        "meaning": "đại diện",
+        "type": "v",
+        "level": "B1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "rewarding",
+        "meaning": "bổ ích",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "scalability",
+        "meaning": "khả năng mở rộng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "scattered",
+        "meaning": "rải rác",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "stable",
+        "meaning": "ổn định",
+        "type": "adj",
+        "level": "B2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "staggering",
+        "meaning": "kinh ngạc",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "supercharge",
+        "meaning": "tăng cường mạnh",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "tout",
+        "meaning": "quảng cáo rầm rộ",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "trillion",
+        "meaning": "nghìn tỷ",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "uniformity",
+        "meaning": "sự đồng nhất",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "unprecedented",
+        "meaning": "chưa từng có",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "unviable",
+        "meaning": "không khả thi",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "viable",
+        "meaning": "khả thi",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "volatile",
+        "meaning": "biến động",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "address",
+        "meaning": "giải quyết",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "beautify",
+        "meaning": "làm đẹp, tô điểm",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "differentiate",
+        "meaning": "phân biệt",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "drive",
+        "meaning": "thúc đẩy",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "gratification",
+        "meaning": "sự hài lòng, thỏa mãn",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "impulsive",
+        "meaning": "bốc đồng, hấp tấp",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "inconsiderate",
+        "meaning": "thiếu chu đáo, thiếu suy nghĩ",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "irrigation",
+        "meaning": "sự tưới tiêu",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "mindfulness",
+        "meaning": "sự chánh niệm, sự lưu tâm",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "necessity",
+        "meaning": "nhu cầu thiết yếu",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "restrictive",
+        "meaning": "hạn chế",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "unaffordable",
+        "meaning": "quá đắt, không đủ khả năng chi trả",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "urge",
+        "meaning": "sự thôi thúc, ham muốn",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "adaptability",
+        "meaning": "khả năng thích nghi",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "designated",
+        "meaning": "được chỉ định",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "diplomacy",
+        "meaning": "ngoại giao",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "drawback",
+        "meaning": "hạn chế, nhược điểm",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "employability",
+        "meaning": "khả năng có việc làm",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "inconvenience",
+        "meaning": "sự bất tiện",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "openness",
+        "meaning": "sự cởi mở",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "outweigh",
+        "meaning": "lớn hơn, quan trọng hơn",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "stereotype",
+        "meaning": "khuôn mẫu",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "flawless",
+        "meaning": "hoàn hảo, không tì vết",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "idealised",
+        "meaning": "được lý tưởng hóa",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "insecure",
+        "meaning": "thiếu tự tin, bất an",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "opt",
+        "meaning": "lựa chọn",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "undermine",
+        "meaning": "làm suy yếu",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "collective",
+        "meaning": "tập thể, chung",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "commercialism",
+        "meaning": "chủ nghĩa thương mại",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "obsolete",
+        "meaning": "lỗi thời, lạc hậu",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "overshadow",
+        "meaning": "làm lu mờ",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "reenact",
+        "meaning": "tái hiện",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "respiratory",
+        "meaning": "thuộc về hô hấp",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "restrict",
+        "meaning": "hạn chế, giới hạn",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "revive",
+        "meaning": "hồi sinh",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "significance",
+        "meaning": "ý nghĩa, tầm quan trọng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "spark",
+        "meaning": "châm ngòi, khơi dậy",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "urbanisation",
+        "meaning": "sự đô thị hóa",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "vibrant",
+        "meaning": "sôi động, rực rỡ",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "open-minded",
+        "meaning": "cởi mở",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "internalise",
+        "meaning": "tiếp thu, làm cho thành tư tưởng cá",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "accelerate",
+        "meaning": "tăng tốc, thúc đẩy",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "aspiration",
+        "meaning": "khát vọng, nguyện vọng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "breadwinner",
+        "meaning": "trụ cột gia đình",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "coexist",
+        "meaning": "cùng tồn tại",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "contradiction",
+        "meaning": "sự mâu thuẫn",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "converge",
+        "meaning": "hội tụ, đồng quy",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "correspondence",
+        "meaning": "thư từ",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "counselling",
+        "meaning": "sự tư vấn",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "decisively",
+        "meaning": "một cách dứt khoát, quả quyết",
+        "type": "adv",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "dignity",
+        "meaning": "phẩm giá, sự cao quý",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "disapproval",
+        "meaning": "sự không tán thành, sự phản đối",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "discard",
+        "meaning": "vứt bỏ",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "disrupt",
+        "meaning": "làm gián đoạn, phá vỡ",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "distinct",
+        "meaning": "khác biệt, riêng biệt",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "encounter",
+        "meaning": "chạm trán, gặp phải",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "equity",
+        "meaning": "sự công bằng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "exclusion",
+        "meaning": "sự loại trừ",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "exclusivity",
+        "meaning": "sự độc quyền",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "fair-minded",
+        "meaning": "công bằng",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "flee",
+        "meaning": "chạy trốn",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "hardship",
+        "meaning": "sự gian khổ, khó khăn",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "homogeneity",
+        "meaning": "sự đồng nhất",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "impersonal",
+        "meaning": "thiếu tính cá nhân, lạnh lùng, vô cảm",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "intervention",
+        "meaning": "sự can thiệp (mang hàm ý tích cực)",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "isolation",
+        "meaning": "sự cô lập",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "like-minded",
+        "meaning": "cùng chí hướng, cùng suy nghĩ",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "long-standing",
+        "meaning": "lâu đời, lâu năm",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "overriding",
+        "meaning": "quan trọng hơn hết",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "permanence",
+        "meaning": "sự vĩnh viễn, lâu dài",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "precarious",
+        "meaning": "bấp bênh, không chắc chắn",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "prosperity",
+        "meaning": "sự thịnh vượng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "reverse",
+        "meaning": "đảo ngược",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "sincerity",
+        "meaning": "sự chân thành",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "solidarity",
+        "meaning": "sự đoàn kết",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "stigma",
+        "meaning": "sự kỳ thị",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "tangible",
+        "meaning": "hữu hình",
+        "type": "adj",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "unite",
+        "meaning": "đoàn kết, hợp nhất",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "unnoticed",
+        "meaning": "không bị nhận thấy, chú ý",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "advancement",
+        "meaning": "sự tiến bộ; sự thăng tiến (công việc)",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "algorithm",
+        "meaning": "thuật toán",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "burden",
+        "meaning": "gánh nặng",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "efficiency",
+        "meaning": "sự hiệu quả",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "empathy",
+        "meaning": "sự đồng cảm",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "exclude",
+        "meaning": "loại trừ, loại bỏ",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "far-reaching",
+        "meaning": "có tầm ảnh hưởng sâu rộng",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "gratitude",
+        "meaning": "lòng biết ơn",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "hesitation",
+        "meaning": "sự do dự",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "hinder",
+        "meaning": "cản trở, gây trở ngại",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "hybrid",
+        "meaning": "lai, kết hợp",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "influential",
+        "meaning": "có ảnh hưởng",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "insufficient",
+        "meaning": "không đủ",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "domain",
+        "meaning": "lĩnh vực",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "neglect",
+        "meaning": "sao nhãng, bỏ bê,  không chú ý",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "oppressive",
+        "meaning": "ngột ngạt, nặng nề",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "overestimate",
+        "meaning": "đánh giá quá cao",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "overlook",
+        "meaning": "không chú ý tới, bỏ sót",
+        "type": "v",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "overwhelming",
+        "meaning": "áp đảo, choáng ngợp",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "persist",
+        "meaning": "tiếp tục tồn tại, kéo dài",
+        "type": "v",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "pioneer",
+        "meaning": "người tiên phong",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "untapped",
+        "meaning": "chưa được khai thác",
+        "type": "adj",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "upkeep",
+        "meaning": "sự bảo dưỡng, chi phí bảo dưỡng",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "administration",
+        "meaning": "sự quản lý, sự quản trị",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "bias",
+        "meaning": "sự thiên vị; thành kiến",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "comprehend",
+        "meaning": "hiểu, lĩnh hội",
+        "type": "v",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "disinterest",
+        "meaning": "sự thờ ơ, sự không quan tâm",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "disloyalty",
+        "meaning": "sự không trung thành",
+        "type": "n",
+        "level": "C1",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "framework",
+        "meaning": "khuôn khổ",
+        "type": "n",
+        "level": "C2",
+        "topic": "Từ vựng SGK & Nâng cao",
+        "example": ""
+      },
+      {
+        "word": "play a role in doing something",
+        "meaning": "đóng vai trò trong việc làm gì",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "sign up for something",
+        "meaning": "đăng ký tham gia, ghi danh vào cái gì",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "come along",
+        "meaning": "đến, xuất hiện, đồng hành",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "made from",
+        "meaning": "được làm từ",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "put something at risk",
+        "meaning": "đặt cái gì vào tình thế rủi ro",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "trade something for something",
+        "meaning": "đổi cái gì lấy cái gì",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "fill out",
+        "meaning": "điền vào (mẫu đơn, giấy tờ)",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "push out",
+        "meaning": "đẩy ra, loại bỏ",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "make up trang",
+        "meaning": "điểm; bịa chuyện; chiếm; làm hoà",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "a sense of community",
+        "meaning": "ý thức cộng đồng",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "give back to the community",
+        "meaning": "đóng góp lại cho cộng đồng",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "face up to",
+        "meaning": "đối mặt với",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "look forward to mong",
+        "meaning": "đợi",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "adjust to something",
+        "meaning": "điều chỉnh để phù hợp với điều gì đó",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "contribute to",
+        "meaning": "đóng góp vào, góp phần vào",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "invest in",
+        "meaning": "đầu tư vào",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "cope with",
+        "meaning": "đối phó, đương đầu với",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "be confronted with something",
+        "meaning": "đối mặt với điều gì",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "preferable to something",
+        "meaning": "đáng ưa chuộng hơn cái gì, thích hợp hơn",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "be attributed to",
+        "meaning": "được cho là do, được quy cho",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "be based on something",
+        "meaning": "được dựa trên cái gì",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "get credit for something",
+        "meaning": "được công nhận/khen ngợi vì điều gì",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "get off the beaten track",
+        "meaning": "đi đến những nơi hẻo lánh, ít người biết",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "make decisions",
+        "meaning": "đưa ra quyết định",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "be under pressure",
+        "meaning": "đang chịu áp lực",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "make a commitment",
+        "meaning": "đưa ra lời cam kết",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "take measures",
+        "meaning": "áp dụng biện pháp, thực hiện biện pháp",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "in response to",
+        "meaning": "để đáp lại, để đối phó",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "to be on the mend",
+        "meaning": "đang bình phục gần lành mạnh",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "play a role",
+        "meaning": "đóng vai trò",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "make a decision",
+        "meaning": "đưa ra quyết định",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "become widely used",
+        "meaning": "được sử dụng rộng rãi",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "take charge of something",
+        "meaning": "đảm trách cái gì",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "full of sincerity",
+        "meaning": "đầy chân thành",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "full of experience",
+        "meaning": "đầy kinh nghiệm",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "be for sale",
+        "meaning": "được bán",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "be saved from extinction",
+        "meaning": "được bảo vệ khỏi nạn tuyệt chủng",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "greatly influence",
+        "meaning": "ảnh hưởng đáng kể",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "be eligible for something",
+        "meaning": "đủ điều kiện cho cái gì",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "register for the course",
+        "meaning": "đăng ký khóa học",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "stands to reason that",
+        "meaning": "… rõ ràng là…",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "set one’s sight on sth",
+        "meaning": "đặt mục tiêu vào gì đó",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "to be in favor of something",
+        "meaning": "ủng hộ/thích cái gì",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "go fishing",
+        "meaning": "đi câu cá",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "make sure",
+        "meaning": "đảm bảo, chắc chắn",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "deal with somebody/something",
+        "meaning": "đối phó với ai/cái gì",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "put up",
+        "meaning": "đề xuất, xây hoặc đặt cái gì ở đâu, cho ai ở nhờ,",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "check in",
+        "meaning": "đến lễ tân của khách sạn, sân bay, v.v. và xác",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "take in somebody cho ai",
+        "meaning": "đó ở lại nhà, làm cho ai đó tin vào điều gì",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "come up against somebody/something",
+        "meaning": "đối mặt với ai/cái gì",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "bring in something",
+        "meaning": "đưa ra cái gì (luật, quy định,…)",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "face up to something",
+        "meaning": "đối diện với cái gì",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "knock somebody down/over",
+        "meaning": "đánh/tông ai đó và làm họ ngã xuống đất",
+        "type": "phrasal verb",
+        "level": "B2",
+        "topic": "Cụm động từ dự đoán",
+        "example": ""
+      },
+      {
+        "word": "come over",
+        "meaning": "được hiểu thấu, gây ấn tượng",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "get out",
+        "meaning": "được biết đến",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "turn away quay",
+        "meaning": "đi",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "hold up",
+        "meaning": "ách tắc, đình trệ",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "show up",
+        "meaning": "đến, có mặt",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "come up to",
+        "meaning": "đạt đến một tiêu chuẩn",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "run over",
+        "meaning": "đâm bằng phương tiện giao thông",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "come away with",
+        "meaning": "đi trốn với ai",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "make off with",
+        "meaning": "ăn trộm và chuồn đi mất",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "make up for",
+        "meaning": "đền bù, bù đắp",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "make away with",
+        "meaning": "ăn trộm",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "bring about mang",
+        "meaning": "đến, mang lại",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "give in",
+        "meaning": "đồng ý, nhượng bộ",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      },
+      {
+        "word": "get away",
+        "meaning": "đi nghỉ dưỡng/ trốn thoát",
+        "type": "collocation",
+        "level": "B2",
+        "topic": "Cấu trúc & Collocations",
+        "example": ""
+      }
+    ];
+
+    let vocabList = [];
+
+    // Khởi tạo
+    function initApp() {
+      // Tab switching logic
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+          btn.classList.add('active');
+          document.getElementById(btn.dataset.target).classList.add('active');
+        });
+      });
+
+      // Theme toggle
+      const themeBtn = document.getElementById('themeToggle');
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.setAttribute('data-theme', 'dark');
+        themeBtn.innerHTML = '☀️ Light Mode';
+      }
+      themeBtn.addEventListener('click', () => {
+        if (document.body.getAttribute('data-theme') === 'dark') {
+          document.body.removeAttribute('data-theme');
+          localStorage.setItem('theme', 'light');
+          themeBtn.innerHTML = '🌙 Dark Mode';
+        } else {
+          document.body.setAttribute('data-theme', 'dark');
+          localStorage.setItem('theme', 'dark');
+          themeBtn.innerHTML = '☀️ Light Mode';
+        }
+      });
+
+      // Load dữ liệu
+      loadVocabulary();
+    }
+
+    function loadVocabulary() {
+      const stored = localStorage.getItem("leximaster_pro_vocab_v3");
+      if (stored) {
+        try {
+          vocabList = JSON.parse(stored);
+          if (!Array.isArray(vocabList) || vocabList.length === 0) vocabList = [...PDF_VOCAB];
+        } catch (e) {
+          vocabList = [...PDF_VOCAB];
+        }
+      } else {
+        vocabList = [...PDF_VOCAB];
+        saveVocabulary();
+      }
+      filterVocab();
+    }
+
+    function saveVocabulary() {
+      localStorage.setItem("leximaster_pro_vocab_v3", JSON.stringify(vocabList));
+    }
+
+    function loadDefaultData() {
+      if (confirm("Hành động này sẽ xóa các từ bạn đã thêm và khôi phục lại kho từ gốc từ PDF. Bạn có chắc chắn?")) {
+        vocabList = [...PDF_VOCAB];
+        saveVocabulary();
+        filterVocab();
+        alert("Đã khôi phục dữ liệu gốc thành công!");
+      }
+    }
+
+    function renderVocabGrid(list) {
+      const grid = document.getElementById("vocabGrid");
+      if (list.length === 0) {
+        grid.innerHTML = `<div class="empty-state">Không tìm thấy từ vựng nào!</div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map((item, index) => `
+      <div class="word-item glass">
+        <button class="delete-btn" onclick="deleteWord('${item.word}')">✖</button>
+        <div class="word-header">
+          <div class="word-title">${item.word}</div>
+          <span class="word-type">(${item.type})</span>
+        </div>
+        <div class="word-meaning">${item.meaning}</div>
+        <div class="word-tags">
+          <span class="tag tag-${item.level}">${item.level}</span>
+          <span class="tag" style="background: var(--tab-bg);">${item.topic}</span>
+        </div>
+        ${item.example ? `<div class="word-example">"${item.example}"</div>` : ''}
+      </div>
+    `).join('');
+    }
+
+    function filterVocab() {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const level = document.getElementById("filterLevel").value;
+
+      let filtered = vocabList.filter(item => {
+        const matchSearch = item.word.toLowerCase().includes(search) || item.meaning.toLowerCase().includes(search);
+        const matchLevel = (level === 'all') || (item.level === level);
+        return matchSearch && matchLevel;
+      });
+
+      renderVocabGrid(filtered);
+    }
+
+    function addNewWord() {
+      const word = document.getElementById("addWord").value.trim();
+      const meaning = document.getElementById("addMeaning").value.trim();
+      const type = document.getElementById("addType").value;
+      const level = document.getElementById("addLevel").value;
+      const topic = document.getElementById("addTopic").value.trim() || 'Tự thêm';
+      const example = document.getElementById("addExample").value.trim();
+
+      if (!word || !meaning) {
+        alert("Vui lòng nhập Từ vựng và Nghĩa!");
+        return;
+      }
+
+      if (vocabList.some(w => w.word.toLowerCase() === word.toLowerCase())) {
+        alert("Từ này đã có trong kho!");
+        return;
+      }
+
+      vocabList.unshift({ word, meaning, type, level, topic, example });
+      saveVocabulary();
+      filterVocab();
+
+      // Reset form
+      document.getElementById("addWord").value = '';
+      document.getElementById("addMeaning").value = '';
+      document.getElementById("addExample").value = '';
+      alert("Đã thêm từ vựng thành công!");
+    }
+
+    function deleteWord(wordText) {
+      if (confirm(`Bạn có chắc chắn muốn xóa từ "${wordText}"?`)) {
+        vocabList = vocabList.filter(w => w.word !== wordText);
+        saveVocabulary();
+        filterVocab();
+      }
+    }
+
+    /* -----------------------------------------------------------
+       QUIZ LOGIC
+       ----------------------------------------------------------- */
+    let quizData = [];
+    let currentQIndex = 0;
+    let score = 0;
+
+    function startQuiz() {
+      const level = document.getElementById("quizLevelFilter").value;
+      let pool = vocabList;
+      if (level !== 'all') {
+        pool = vocabList.filter(w => w.level === level);
+      }
+
+      if (pool.length < 4) {
+        alert("Không đủ từ vựng trong cấp độ này để tạo Quiz (cần ít nhất 4 từ). Hãy thêm từ vào kho nhé!");
+        return;
+      }
+
+      // Lấy tối đa 10 câu
+      const numQ = Math.min(10, pool.length);
+      let shuffledPool = [...pool].sort(() => 0.5 - Math.random());
+      let selectedWords = shuffledPool.slice(0, numQ);
+
+      quizData = selectedWords.map(targetWord => {
+        // Chọn 3 nghĩa sai từ pool gốc (trừ từ hiện tại)
+        let distractors = vocabList.filter(w => w.word !== targetWord.word).map(w => w.meaning);
+        distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+        let options = [targetWord.meaning, ...distractors];
+        options = options.sort(() => 0.5 - Math.random()); // Trộn đáp án
+
+        return {
+          word: targetWord.word,
+          correct: targetWord.meaning,
+          options: options
+        };
+      });
+
+      currentQIndex = 0;
+      score = 0;
+
+      document.getElementById("quizSetup").style.display = 'none';
+      document.getElementById("quizResult").style.display = 'none';
+      document.getElementById("quizPlay").style.display = 'block';
+
+      document.getElementById("qTotal").innerText = quizData.length;
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = quizData[currentQIndex];
+      document.getElementById("qCurrent").innerText = currentQIndex + 1;
+      document.getElementById("qScore").innerText = score;
+      document.getElementById("qWord").innerText = q.word;
+      document.getElementById("qFeedback").innerText = "";
+      document.getElementById("nextQBtn").style.display = "none";
+
+      const optsContainer = document.getElementById("qOptions");
+      optsContainer.innerHTML = '';
+
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "quiz-opt-btn";
+        btn.innerText = opt;
+        btn.onclick = () => handleAnswer(btn, opt, q.correct);
+        optsContainer.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(btn, selected, correct) {
+      // Vô hiệu hóa tất cả các nút
+      const btns = document.querySelectorAll(".quiz-opt-btn");
+      btns.forEach(b => b.onclick = null);
+
+      const feedback = document.getElementById("qFeedback");
+
+      if (selected === correct) {
+        btn.classList.add("correct");
+        score++;
+        document.getElementById("qScore").innerText = score;
+        feedback.innerText = "✅ Chính xác!";
+        feedback.style.color = "var(--secondary)";
+      } else {
+        btn.classList.add("wrong");
+        feedback.innerText = `❌ Sai rồi! Đáp án đúng là: "${correct}"`;
+        feedback.style.color = "var(--danger)";
+        // Highlight nút đúng
+        btns.forEach(b => {
+          if (b.innerText === correct) b.classList.add("correct");
+        });
+      }
+
+      document.getElementById("nextQBtn").style.display = "block";
+      if (currentQIndex === quizData.length - 1) {
+        document.getElementById("nextQBtn").innerText = "Xem Kết Quả 🏆";
+      } else {
+        document.getElementById("nextQBtn").innerText = "Câu Tiếp Theo ➡️";
+      }
+    }
+
+    function nextQuestion() {
+      currentQIndex++;
+      if (currentQIndex < quizData.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById("quizPlay").style.display = 'none';
+      document.getElementById("quizResult").style.display = 'block';
+      document.getElementById("finalScore").innerText = `${score} / ${quizData.length}`;
+    }
+
+    // Chạy App
+    initApp();
+  </script>
+
+</body>
+
+</html>
